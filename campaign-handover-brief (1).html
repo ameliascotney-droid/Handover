@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Handover Brief</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f7f7f5;
+    --bg-tertiary: #f0efec;
+    --bg-info: #e6f1fb;
+    --bg-warning: #faeeda;
+    --bg-success: #eaf3de;
+    --text-primary: #1a1a18;
+    --text-secondary: #6b6b67;
+    --text-tertiary: #a8a8a3;
+    --text-info: #185fa5;
+    --text-warning: #633806;
+    --text-success: #0f6e56;
+    --border: rgba(0,0,0,0.12);
+    --border-md: rgba(0,0,0,0.22);
+    --border-strong: rgba(0,0,0,0.35);
+    --radius: 8px;
+    --radius-lg: 12px;
+    --green: #1D9E75;
+    --green-light: #EAF3DE;
+    --green-border: #5DCAA5;
+    --blue: #378ADD;
+    --blue-light: #E6F1FB;
+    --blue-dark: #185FA5;
+    --blue-border: #85B7EB;
+    --red: #E24B4A;
+    --amber-bg: #FAEEDA;
+    --amber-border: #FAC775;
+    --amber-text: #633806;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg-secondary: #252523;
+      --bg-tertiary: #2e2e2b;
+      --bg-info: #0c2d4e;
+      --bg-warning: #3d2200;
+      --bg-success: #0a2e1f;
+      --text-primary: #f0efec;
+      --text-secondary: #9a9a95;
+      --text-tertiary: #5a5a56;
+      --text-info: #85B7EB;
+      --text-warning: #FAC775;
+      --text-success: #5DCAA5;
+      --border: rgba(255,255,255,0.1);
+      --border-md: rgba(255,255,255,0.18);
+      --border-strong: rgba(255,255,255,0.28);
+      --blue-light: #0c2d4e;
+      --blue-dark: #85B7EB;
+      --green-light: #0a2e1f;
+      --amber-bg: #3d2200;
+      --amber-border: #7a5000;
+      --amber-text: #FAC775;
+    }
+  }
+  html { font-size: 16px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+  .page-wrap { max-width: 860px; margin: 0 auto; }
+
+  /* PAGE HEADER */
+  .page-header {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .page-header-left {}
+  .page-header-badges { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .badge {
+    font-size: 11px; font-weight: 500; padding: 3px 10px;
+    border-radius: 20px; display: inline-flex; align-items: center;
+  }
+  .badge-blue { background: var(--bg-info); color: var(--text-info); }
+  .badge-amber { background: var(--bg-warning); color: var(--text-warning); }
+  .page-header h1 { font-size: 22px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .page-header p { font-size: 13px; color: var(--text-secondary); }
+  .rdot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--red); margin-left: 4px; vertical-align: middle; }
+
+  /* PROGRESS */
+  .progress-bar { display: flex; gap: 3px; margin-bottom: 1.5rem; }
+  .ps { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background .3s; }
+  .ps.done { background: var(--green); }
+  .ps.active { background: var(--blue); }
+
+  /* SECTION */
+  .sec {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .sec-hd {
+    display: flex; align-items: center; gap: 10px;
+    padding: 1rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg);
+  }
+  .sn {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--bg-secondary); border: 0.5px solid var(--border-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500; color: var(--text-secondary); flex-shrink: 0;
+  }
+  .sn.on { background: var(--blue-light); border-color: var(--blue); color: var(--blue-dark); }
+  .sec-title { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+  .sec-aside { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
+  .sec-body { padding: 1.25rem 1.5rem; }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; }
+  .grid.g3 { grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); }
+  .full { grid-column: 1 / -1; }
+
+  /* FIELD */
+  .f { display: flex; flex-direction: column; gap: 5px; }
+  .f label { font-size: 12px; font-weight: 500; color: var(--text-secondary); letter-spacing: .02em; }
+  .f input, .f select, .f textarea {
+    font-family: inherit; font-size: 14px; color: var(--text-primary);
+    background: var(--bg); border: 0.5px solid var(--border-md);
+    border-radius: var(--radius); padding: 8px 10px; width: 100%; outline: none;
+    transition: border-color .15s;
+  }
+  .f input:focus, .f select:focus, .f textarea:focus { border-color: var(--blue); }
+  .f textarea { resize: vertical; min-height: 68px; line-height: 1.5; }
+  .f input::placeholder, .f textarea::placeholder { color: var(--text-tertiary); }
+
+  /* CLIENT STRIP */
+  .client-strip {
+    background: var(--bg-secondary); border-radius: var(--radius);
+    padding: 1rem 1.25rem; margin-bottom: 1rem;
+    border: 0.5px solid var(--border);
+  }
+  .strip-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; }
+  .cf { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+
+  /* TIMELINE */
+  .tl-wrap {
+    background: var(--bg-secondary); border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem; margin-top: 12px;
+    border: 0.5px solid var(--border);
+  }
+  .tl-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 8px; }
+  .tl-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); letter-spacing: .06em; text-transform: uppercase; }
+  .tl-auto-badge {
+    font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px;
+    background: var(--green-light); border: 0.5px solid var(--green-border); color: var(--text-success);
+  }
+  .tl-legend { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tl-leg { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-secondary); }
+  .tl-leg-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .tl-scroll { overflow-x: auto; padding-bottom: 4px; }
+  .tl-stages { display: flex; align-items: flex-start; position: relative; min-width: 640px; }
+  .tl-stages::before {
+    content: ''; position: absolute; top: 14px; left: 14px; right: 14px;
+    height: 1px; background: var(--border-md); z-index: 0;
+  }
+  .tl-stage { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; z-index: 1; }
+  .tl-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--border-md); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 500; color: var(--text-secondary);
+    transition: all .25s; flex-shrink: 0;
+  }
+  .tl-stage.done .tl-dot { background: var(--green); border-color: var(--green); color: #fff; }
+  .tl-stage.current .tl-dot { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 0 0 4px var(--blue-light); }
+  .tl-stage.future .tl-dot { opacity: .35; }
+  .tl-stage-label { font-size: 10px; font-weight: 500; color: var(--text-secondary); margin-top: 6px; text-align: center; line-height: 1.3; max-width: 66px; }
+  .tl-stage.done .tl-stage-label { color: var(--text-success); }
+  .tl-stage.current .tl-stage-label { color: var(--blue-dark); }
+  .tl-stage.future .tl-stage-label { opacity: .45; }
+  .tl-stage-meta { font-size: 9px; color: var(--text-tertiary); margin-top: 2px; text-align: center; max-width: 66px; line-height: 1.3; }
+  .tl-stage.done .tl-stage-meta { color: var(--green-border); }
+  .tl-stage.current .tl-stage-meta { color: var(--blue-border); }
+
+  /* TIMELINE TABLE */
+  .tl-rows { margin-top: 1.25rem; border: 0.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .tl-row { display: grid; grid-template-columns: 180px 130px 150px 1fr; border-bottom: 0.5px solid var(--border); }
+  .tl-row:last-child { border-bottom: none; }
+  .tl-row-hdr { background: var(--bg-secondary); }
+  .tl-row.is-current { background: var(--blue-light); }
+  .tl-row.is-done { background: var(--bg); }
+  .tl-row.is-future { background: var(--bg); opacity: .7; }
+  .tl-cell {
+    padding: 8px 12px; font-size: 13px; color: var(--text-primary);
+    border-right: 0.5px solid var(--border); display: flex; align-items: center;
+  }
+  .tl-cell:last-child { border-right: none; }
+  .tl-cell.hdr { font-size: 11px; font-weight: 500; color: var(--text-secondary); letter-spacing: .02em; }
+  .tl-stage-name { font-weight: 500; }
+  .tl-row.is-current .tl-stage-name { color: var(--blue-dark); }
+  .tl-row.is-done .tl-stage-name { color: var(--text-success); }
+  .tl-status-pill { font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 10px; white-space: nowrap; }
+  .pill-done { background: var(--green-light); color: var(--text-success); }
+  .pill-current { background: var(--blue-light); color: var(--blue-dark); }
+  .pill-future { background: var(--bg-secondary); color: var(--text-secondary); }
+  .tl-cell input[type=date] { font-family: inherit; font-size: 12px; border: none; background: transparent; color: var(--text-primary); outline: none; width: 100%; padding: 0; cursor: pointer; }
+  .tl-cell input[type=text] { font-family: inherit; font-size: 12px; border: none; background: transparent; color: var(--text-secondary); outline: none; width: 100%; padding: 0; }
+  .tl-cell input[type=text]:focus { color: var(--text-primary); }
+  .tl-cell input::placeholder { color: var(--text-tertiary); font-size: 11px; }
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 1rem 0; }
+
+  /* OBJECTIVES */
+  .obj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 8px; }
+  .oc {
+    border: 0.5px solid var(--border); border-radius: var(--radius);
+    padding: 9px 12px; cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .oc:hover { border-color: var(--border-md); }
+  .oc.on { border-color: var(--green); background: var(--green-light); }
+  .oc-lbl { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+
+  /* LANES */
+  .lane-wrap { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 16px; margin-bottom: 14px; }
+  .lane { border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  .lane-hdr { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 0.5px solid var(--border); }
+  .lane-hdr.paid { background: var(--blue-light); }
+  .lane-hdr.organic { background: var(--green-light); }
+  .lane-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .paid .lane-dot { background: var(--blue); }
+  .organic .lane-dot { background: var(--green); }
+  .lane-lbl { font-size: 12px; font-weight: 500; letter-spacing: .03em; }
+  .paid .lane-lbl { color: var(--blue-dark); }
+  .organic .lane-lbl { color: var(--text-success); }
+  .lane-count { font-size: 11px; margin-left: auto; }
+  .paid .lane-count { color: var(--blue); }
+  .organic .lane-count { color: var(--green); }
+  .lane-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; min-height: 60px; }
+  .lane-empty { font-size: 12px; color: var(--text-tertiary); padding: 8px 0; font-style: italic; }
+  .plrow { border: 0.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .plrow-top { display: flex; align-items: center; cursor: pointer; }
+  .plrow-top:hover { background: var(--bg-secondary); }
+  .plrow-chk { width: 32px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .plrow-chk input { width: 14px; height: 14px; accent-color: var(--blue); cursor: pointer; }
+  .organic .plrow-chk input { accent-color: var(--green); }
+  .plrow-name { font-size: 13px; font-weight: 500; color: var(--text-primary); flex: 1; padding: 8px 4px; }
+  .plrow-ratio { font-size: 11px; color: var(--text-secondary); padding: 8px 10px 8px 0; white-space: nowrap; }
+  .plrow-body { display: none; border-top: 0.5px solid var(--border); padding: 10px 12px; background: var(--bg-secondary); }
+  .plrow-body.open { display: block; }
+  .plrow-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+  .pf { display: flex; flex-direction: column; gap: 4px; }
+  .pf label { font-size: 11px; font-weight: 500; color: var(--text-secondary); letter-spacing: .02em; }
+  .pf input, .pf select { font-family: inherit; font-size: 12px; color: var(--text-primary); background: var(--bg); border: 0.5px solid var(--border); border-radius: 4px; padding: 5px 8px; width: 100%; outline: none; }
+  .pf input:focus, .pf select:focus { border-color: var(--blue); }
+  .safe-note { font-size: 11px; color: var(--amber-text); margin-top: 6px; padding: 6px 8px; background: var(--amber-bg); border: 0.5px solid var(--amber-border); border-radius: 4px; line-height: 1.4; }
+
+  /* ASSETS */
+  .asset-box { background: var(--bg-secondary); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+
+  /* EXTENDED NETWORK */
+  .en-wrap { border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  .en-toggle { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; transition: background .15s; background: var(--bg); }
+  .en-toggle:hover { background: var(--bg-secondary); }
+  .en-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .en-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--bg-secondary); border: 0.5px solid var(--border-md); color: var(--text-secondary); margin-left: auto; }
+  .en-badge.active { background: var(--green-light); border-color: var(--green-border); color: var(--text-success); }
+  .en-arrow { font-size: 12px; color: var(--text-secondary); transition: transform .2s; flex-shrink: 0; }
+  .en-arrow.open { transform: rotate(180deg); }
+  .en-body { display: none; border-top: 0.5px solid var(--border); padding: 1rem 1.25rem; background: var(--bg-secondary); }
+  .en-body.open { display: block; }
+  .en-page-row { border: 0.5px solid var(--border); border-radius: var(--radius); background: var(--bg); overflow: hidden; margin-bottom: 8px; }
+  .en-page-top { display: grid; grid-template-columns: 2fr 1fr 1fr 28px; gap: 8px; align-items: center; padding: 8px 10px; }
+  .en-page-top input, .en-page-top select { font-family: inherit; font-size: 13px; color: var(--text-primary); background: var(--bg); border: 0.5px solid var(--border-md); border-radius: var(--radius); padding: 6px 8px; width: 100%; outline: none; }
+  .en-page-body { border-top: 0.5px solid var(--border); padding: 10px 12px; background: var(--bg-secondary); display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+  .en-col-hdr { display: grid; grid-template-columns: 2fr 1fr 1fr 28px; gap: 8px; padding: 0 10px 6px; margin-top: 4px; }
+  .en-col-hdr span { font-size: 11px; font-weight: 500; color: var(--text-secondary); letter-spacing: .02em; }
+
+  /* BRAND */
+  .brand-panel { background: var(--bg-secondary); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+  .swatch { width: 24px; height: 24px; border-radius: 4px; border: 0.5px solid var(--border-md); cursor: pointer; transition: transform .1s; flex-shrink: 0; }
+  .swatch:hover { transform: scale(1.15); }
+  .hex-input { font-size: 12px; border: 0.5px solid var(--border); border-radius: 4px; padding: 3px 7px; background: var(--bg); color: var(--text-primary); width: 90px; font-family: monospace; outline: none; }
+
+  /* BUTTONS */
+  .rm { background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 16px; padding: 2px 5px; border-radius: 4px; transition: color .15s; }
+  .rm:hover { color: var(--red); }
+  .add-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue-dark); background: none; border: 0.5px dashed var(--blue-border); border-radius: var(--radius); padding: 7px 14px; cursor: pointer; margin-top: 4px; transition: background .15s; font-family: inherit; }
+  .add-btn:hover { background: var(--blue-light); }
+  .add-btn.org { color: var(--text-success); border-color: var(--green-border); }
+  .add-btn.org:hover { background: var(--green-light); }
+
+  /* CHECKLIST */
+  .cl { display: flex; flex-direction: column; gap: 9px; }
+  .ci { display: flex; align-items: center; gap: 10px; }
+  .ci input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; flex-shrink: 0; }
+  .ci label { font-size: 14px; color: var(--text-primary); cursor: pointer; line-height: 1.4; }
+
+  /* SLACK SUMMARY */
+  .slack-wrap { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-top: 1rem; }
+  .slack-hdr { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-secondary); border-bottom: 0.5px solid var(--border); }
+  .slack-icon { width: 28px; height: 28px; border-radius: 6px; background: #4A154B; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .slack-icon svg { width: 16px; height: 16px; fill: #fff; }
+  .slack-hdr-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .slack-hdr-sub { font-size: 12px; color: var(--text-secondary); }
+  .slack-hdr-sub span { color: var(--blue-dark); font-weight: 500; }
+  .slack-body { padding: 1rem 1.25rem; }
+  .slack-msg { background: var(--bg-secondary); border: 0.5px solid var(--border-md); border-radius: var(--radius); padding: 1rem 1.25rem; font-size: 13px; line-height: 1.7; color: var(--text-primary); white-space: pre-wrap; min-height: 100px; font-family: inherit; }
+  .slack-actions { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .btn-slack { display: flex; align-items: center; gap: 7px; background: #4A154B; color: #fff; border: none; border-radius: var(--radius); padding: 10px 18px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: opacity .15s; }
+  .btn-slack:hover { opacity: .85; }
+  .btn-regen { background: none; border: 0.5px solid var(--border-md); border-radius: var(--radius); padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; color: var(--text-secondary); transition: background .15s; display: flex; align-items: center; gap: 6px; }
+  .btn-regen:hover { background: var(--bg-secondary); }
+  .copy-confirm { font-size: 12px; color: var(--green); display: none; }
+  .copy-confirm.show { display: block; }
+
+  /* SUBMIT */
+  .sub-row { display: flex; align-items: center; gap: 12px; margin-top: 1.5rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--text-primary); color: var(--bg); border: none; border-radius: var(--radius); padding: 11px 24px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; transition: opacity .15s; }
+  .btn-primary:hover { opacity: .82; }
+  .btn-ghost { background: none; border: 0.5px solid var(--border-md); border-radius: var(--radius); padding: 11px 24px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; color: var(--text-secondary); transition: background .15s; }
+  .btn-ghost:hover { background: var(--bg-secondary); }
+  .sub-hint { font-size: 12px; color: var(--red); }
+  .ok-banner { display: none; background: var(--green-light); border: 0.5px solid var(--green-border); border-radius: var(--radius); padding: 12px 16px; font-size: 14px; color: var(--text-success); margin-top: 1rem; align-items: center; gap: 8px; }
+  .ok-banner.show { display: flex; }
+
+  @media (max-width: 640px) {
+    body { padding: 1rem 0.5rem 3rem; }
+    .lane-wrap, .grid, .grid.g3, .cf, .plrow-grid, .en-page-body { grid-template-columns: 1fr; }
+    .tl-row { grid-template-columns: 1fr 1fr; }
+    .en-page-top, .en-col-hdr { grid-template-columns: 1fr 1fr; }
+    .sec-body { padding: 1rem; }
+    .page-header { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-header-badges">
+        <span class="badge badge-blue">Pre-sale → Activation</span>
+        <span class="badge badge-amber">Multi-client</span>
+      </div>
+      <h1>Campaign handover brief</h1>
+      <p>Completed by client services manager &nbsp;·&nbsp; Received by activation team &nbsp;·&nbsp; <span class="rdot"></span> required fields</p>
+    </div>
+  </div>
+
+  <div class="progress-bar" id="prog">
+    <div class="ps active" id="ps0"></div><div class="ps" id="ps1"></div><div class="ps" id="ps2"></div>
+    <div class="ps" id="ps3"></div><div class="ps" id="ps4"></div><div class="ps" id="ps5"></div><div class="ps" id="ps6"></div>
+  </div>
+
+  <!-- 1. CLIENT & CAMPAIGN -->
+  <div class="sec">
+    <div class="sec-hd"><div class="sn on" id="sn0">1</div><span class="sec-title">Client &amp; campaign details</span></div>
+    <div class="sec-body">
+      <div class="client-strip">
+        <div class="strip-title">Client identity</div>
+        <div class="cf">
+          <div class="f"><label>Client / brand name <span class="rdot"></span></label><input type="text" id="f-client" placeholder="e.g. ASOS, Nike UK" oninput="tick()"></div>
+          <div class="f"><label>Industry / sector</label><select id="f-industry"><option value="">— select —</option><option>Fashion &amp; apparel</option><option>Beauty &amp; personal care</option><option>Food &amp; beverage</option><option>Technology</option><option>Financial services</option><option>Entertainment &amp; media</option><option>Health &amp; wellness</option><option>Retail / e-commerce</option><option>Automotive</option><option>Other</option></select></div>
+          <div class="f"><label>Brand tone of voice</label><select id="f-tone"><option value="">— select —</option><option>Bold &amp; confident</option><option>Playful &amp; fun</option><option>Premium &amp; refined</option><option>Warm &amp; friendly</option><option>Authoritative &amp; expert</option><option>Edgy &amp; disruptive</option><option>Minimal &amp; clean</option><option>Refer to brand guidelines</option></select></div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="f"><label>Campaign name <span class="rdot"></span></label><input type="text" id="f-camp" placeholder="e.g. Summer Drop 2025" oninput="tick()"></div>
+        <div class="f"><label>Slack channel name <span class="rdot"></span></label><input type="text" id="f-slack" placeholder="e.g. #nike-summer-drop-2025"></div>
+        <div class="f"><label>Client services manager <span class="rdot"></span></label><input type="text" id="f-csm" placeholder="Full name" oninput="tick()"></div>
+        <div class="f"><label>Campaign go-live date <span class="rdot"></span></label><input type="date" id="f-live"></div>
+      </div>
+
+      <div class="tl-wrap">
+        <div class="tl-top">
+          <span class="tl-title">Campaign timeline</span>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="tl-auto-badge">Auto-tracking active</span>
+            <div class="tl-legend">
+              <div class="tl-leg"><div class="tl-leg-dot" style="background:var(--green)"></div>Completed</div>
+              <div class="tl-leg"><div class="tl-leg-dot" style="background:var(--blue)"></div>Current</div>
+              <div class="tl-leg"><div class="tl-leg-dot" style="background:var(--border-md)"></div>Upcoming</div>
+            </div>
+          </div>
+        </div>
+        <div class="tl-scroll">
+          <div class="tl-stages" id="tl-stages">
+            <div class="tl-stage future" id="ts-0"><div class="tl-dot">1</div><div class="tl-stage-label">Brief received</div><div class="tl-stage-meta" id="tm-0"></div></div>
+            <div class="tl-stage future" id="ts-1"><div class="tl-dot">2</div><div class="tl-stage-label">Concept approved</div><div class="tl-stage-meta" id="tm-1"></div></div>
+            <div class="tl-stage future" id="ts-2"><div class="tl-dot">3</div><div class="tl-stage-label">V1 mocks</div><div class="tl-stage-meta" id="tm-2"></div></div>
+            <div class="tl-stage future" id="ts-3"><div class="tl-dot">4</div><div class="tl-stage-label">V1 feedback</div><div class="tl-stage-meta" id="tm-3"></div></div>
+            <div class="tl-stage future" id="ts-4"><div class="tl-dot">5</div><div class="tl-stage-label">V2 mocks</div><div class="tl-stage-meta" id="tm-4"></div></div>
+            <div class="tl-stage future" id="ts-5"><div class="tl-dot">6</div><div class="tl-stage-label">V2 feedback</div><div class="tl-stage-meta" id="tm-5"></div></div>
+            <div class="tl-stage future" id="ts-6"><div class="tl-dot">7</div><div class="tl-stage-label">Final mocks</div><div class="tl-stage-meta" id="tm-6"></div></div>
+            <div class="tl-stage future" id="ts-7"><div class="tl-dot">8</div><div class="tl-stage-label">Final approval</div><div class="tl-stage-meta" id="tm-7"></div></div>
+            <div class="tl-stage future" id="ts-8"><div class="tl-dot">9</div><div class="tl-stage-label">Assets delivered</div><div class="tl-stage-meta" id="tm-8"></div></div>
+            <div class="tl-stage future" id="ts-9"><div class="tl-dot">10</div><div class="tl-stage-label">Go live</div><div class="tl-stage-meta" id="tm-9"></div></div>
+          </div>
+        </div>
+        <div class="tl-rows" style="margin-top:1.25rem">
+          <div class="tl-row tl-row-hdr">
+            <div class="tl-cell hdr">Stage</div>
+            <div class="tl-cell hdr">Status</div>
+            <div class="tl-cell hdr">Date</div>
+            <div class="tl-cell hdr">Notes <span style="font-weight:400;opacity:.6">(optional)</span></div>
+          </div>
+          <div id="tl-rows-body"></div>
+        </div>
+        <div class="grid" style="margin-top:1rem;padding-top:1rem;border-top:0.5px solid var(--border)">
+          <div class="f"><label>What has already been approved?</label><textarea id="f-approved" placeholder="e.g. Concept deck signed off, messaging pillars confirmed…" style="min-height:56px"></textarea></div>
+          <div class="f"><label>What is still pending sign-off?</label><textarea id="f-pending" placeholder="e.g. Final copy, colour palette, legal clearance…" style="min-height:56px"></textarea></div>
+          <div class="f full"><label>Watch-outs for the activation team</label><textarea id="f-watchouts" placeholder="Changes since brief, sensitivities, previously rejected ideas…" style="min-height:56px"></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. OBJECTIVES -->
+  <div class="sec">
+    <div class="sec-hd"><div class="sn" id="sn1">2</div><span class="sec-title">Campaign objectives</span></div>
+    <div class="sec-body">
+      <div class="f" style="margin-bottom:12px">
+        <label>Primary objective(s) <span class="rdot"></span></label>
+        <div class="obj-grid">
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">Brand awareness</div></div>
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">Reach &amp; impressions</div></div>
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">Engagement</div></div>
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">Conversions / sales</div></div>
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">App installs</div></div>
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">Lead generation</div></div>
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">Retargeting</div></div>
+          <div class="oc" onclick="this.classList.toggle('on');tick()"><div class="oc-lbl">Organic content</div></div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="f"><label>Target audience <span class="rdot"></span></label><textarea id="f-audience" placeholder="Age range, interests, behaviours, geography — be specific" style="min-height:60px"></textarea></div>
+        <div class="f"><label>Key message / hero line <span class="rdot"></span></label><textarea id="f-message" placeholder="The single most important thing the audience must take away" style="min-height:60px"></textarea></div>
+        <div class="f"><label>Call to action (CTA) <span class="rdot"></span></label><input type="text" id="f-cta" placeholder="e.g. Shop now, Learn more, Download"></div>
+        <div class="f"><label>Destination URL</label><input type="text" id="f-url" placeholder="https://…"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PLATFORMS -->
+  <div class="sec">
+    <div class="sec-hd"><div class="sn" id="sn2">3</div><span class="sec-title">Platforms, placements &amp; specs</span><span class="sec-aside">Tick a placement to confirm specs</span></div>
+    <div class="sec-body">
+      <div class="lane-wrap">
+        <div class="lane" id="lane-paid">
+          <div class="lane-hdr paid"><div class="lane-dot"></div><span class="lane-lbl">PAID</span><span class="lane-count" id="paid-count">0 placements</span></div>
+          <div class="lane-body" id="paid-body">
+            <div class="lane-empty" id="paid-empty">No paid placements selected</div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('mf-p','paid')"><div class="plrow-chk"><input type="checkbox" id="c-mf-p" onclick="event.stopPropagation();togP('mf-p','paid')"></div><div class="plrow-name">Meta Feed</div><div class="plrow-ratio">1:1 · 4:5 · 1.91:1</div></div><div class="plrow-body" id="pb-mf-p"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Static image</option><option>Video</option><option>Carousel</option><option>Collection ad</option></select></div><div class="pf"><label>Aspect ratio</label><select><option>1:1 (1080×1080)</option><option>4:5 (1080×1350)</option><option>1.91:1 (1200×628)</option></select></div><div class="pf"><label>Duration</label><input type="text" placeholder="e.g. 15s"></div><div class="pf"><label>File type</label><input type="text" value="JPG, PNG, MP4"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 3"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">Keep key visuals within centre 80%. Avoid bottom 20% for CTA overlap.</div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('ms-p','paid')"><div class="plrow-chk"><input type="checkbox" id="c-ms-p" onclick="event.stopPropagation();togP('ms-p','paid')"></div><div class="plrow-name">Meta Stories</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-ms-p"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Static image</option><option>Video</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="Max 15s"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV, JPG"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 2"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">140px top &amp; bottom reserved for UI. Keep key visuals in the middle 70%.</div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('mr-p','paid')"><div class="plrow-chk"><input type="checkbox" id="c-mr-p" onclick="event.stopPropagation();togP('mr-p','paid')"></div><div class="plrow-name">Meta Reels</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-mr-p"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Video</option><option>Animation</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="15s–90s"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 1"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">Bottom 250px covered by UI. Avoid placing text or logo in bottom 25%.</div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('if-p','paid')"><div class="plrow-chk"><input type="checkbox" id="c-if-p" onclick="event.stopPropagation();togP('if-p','paid')"></div><div class="plrow-name">Instagram Feed</div><div class="plrow-ratio">1:1 · 4:5</div></div><div class="plrow-body" id="pb-if-p"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Static image</option><option>Video</option><option>Carousel</option></select></div><div class="pf"><label>Aspect ratio</label><select><option>1:1 (1080×1080)</option><option>4:5 (1080×1350)</option><option>1.91:1 (1200×628)</option></select></div><div class="pf"><label>Duration</label><input type="text" placeholder="Max 60s"></div><div class="pf"><label>File type</label><input type="text" value="JPG, PNG, MP4"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 2"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">Centre 80% safe. Avoid bottom 20% — caption &amp; icons overlay here.</div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('is-p','paid')"><div class="plrow-chk"><input type="checkbox" id="c-is-p" onclick="event.stopPropagation();togP('is-p','paid')"></div><div class="plrow-name">Instagram Stories</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-is-p"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Static image</option><option>Video</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="Max 15s per card"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV, JPG"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 3 cards"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">Top 14% and bottom 20% reserved for UI. Middle 66% is the safe creative area.</div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('ir-p','paid')"><div class="plrow-chk"><input type="checkbox" id="c-ir-p" onclick="event.stopPropagation();togP('ir-p','paid')"></div><div class="plrow-name">Instagram Reels</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-ir-p"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Video</option><option>Animation</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="Up to 90s"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 1"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">Bottom 35% occupied by captions. Key visuals should sit in the top 65%.</div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('tt-p','paid')"><div class="plrow-chk"><input type="checkbox" id="c-tt-p" onclick="event.stopPropagation();togP('tt-p','paid')"></div><div class="plrow-name">TikTok In-feed</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-tt-p"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Video</option><option>Spark Ad</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="15s / 30s / 60s"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 2"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">Bottom 25% overlaid by CTA &amp; description. Logo &amp; key message must sit above this zone.</div></div></div>
+          </div>
+        </div>
+        <div class="lane" id="lane-org">
+          <div class="lane-hdr organic"><div class="lane-dot"></div><span class="lane-lbl">ORGANIC</span><span class="lane-count" id="org-count">0 placements</span></div>
+          <div class="lane-body" id="org-body">
+            <div class="lane-empty" id="org-empty">No organic placements selected</div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('mf-o','organic')"><div class="plrow-chk"><input type="checkbox" id="c-mf-o" onclick="event.stopPropagation();togP('mf-o','organic')"></div><div class="plrow-name">Meta Feed</div><div class="plrow-ratio">1:1 · 4:5</div></div><div class="plrow-body" id="pb-mf-o"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Static image</option><option>Video</option><option>Carousel</option></select></div><div class="pf"><label>Aspect ratio</label><select><option>1:1 (1080×1080)</option><option>4:5 (1080×1350)</option></select></div><div class="pf"><label>Duration</label><input type="text" placeholder="e.g. 30s"></div><div class="pf"><label>File type</label><input type="text" value="JPG, PNG, MP4"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 2"></div><div class="pf"><label>Deadline</label><input type="date"></div></div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('if-o','organic')"><div class="plrow-chk"><input type="checkbox" id="c-if-o" onclick="event.stopPropagation();togP('if-o','organic')"></div><div class="plrow-name">Instagram Feed</div><div class="plrow-ratio">4:5 recommended</div></div><div class="plrow-body" id="pb-if-o"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Static image</option><option>Video</option><option>Carousel</option></select></div><div class="pf"><label>Aspect ratio</label><select><option>4:5 (1080×1350)</option><option>1:1 (1080×1080)</option></select></div><div class="pf"><label>Duration</label><input type="text" placeholder="Max 60s"></div><div class="pf"><label>File type</label><input type="text" value="JPG, PNG, MP4"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 3"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">4:5 fills more vertical space in-feed and performs better organically.</div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('is-o','organic')"><div class="plrow-chk"><input type="checkbox" id="c-is-o" onclick="event.stopPropagation();togP('is-o','organic')"></div><div class="plrow-name">Instagram Stories</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-is-o"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Static image</option><option>Video</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="Max 15s per card"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV, JPG"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 3 cards"></div><div class="pf"><label>Deadline</label><input type="date"></div></div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('ir-o','organic')"><div class="plrow-chk"><input type="checkbox" id="c-ir-o" onclick="event.stopPropagation();togP('ir-o','organic')"></div><div class="plrow-name">Instagram Reels</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-ir-o"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Video</option><option>Animation</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="Up to 90s"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 1"></div><div class="pf"><label>Deadline</label><input type="date"></div></div></div></div>
+            <div class="plrow"><div class="plrow-top" onclick="togP('tt-o','organic')"><div class="plrow-chk"><input type="checkbox" id="c-tt-o" onclick="event.stopPropagation();togP('tt-o','organic')"></div><div class="plrow-name">TikTok (organic)</div><div class="plrow-ratio">9:16</div></div><div class="plrow-body" id="pb-tt-o"><div class="plrow-grid"><div class="pf"><label>Format</label><select><option>Video</option></select></div><div class="pf"><label>Ratio</label><input type="text" value="9:16 (1080×1920)" readonly></div><div class="pf"><label>Duration</label><input type="text" placeholder="15s / 30s / 60s / 3min"></div><div class="pf"><label>File type</label><input type="text" value="MP4, MOV"></div><div class="pf"><label>Quantity</label><input type="text" placeholder="e.g. 1"></div><div class="pf"><label>Deadline</label><input type="date"></div></div><div class="safe-note">Hook must land in first 1–3s. Bottom 25% covered by caption &amp; interactions.</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="f"><label>Targeting / ad account notes</label><input type="text" id="f-targeting" placeholder="e.g. Retargeting audience, lookalike 1%, broad — specify per placement if different"></div>
+    </div>
+  </div>
+
+  <!-- 4. ASSETS -->
+  <div class="sec">
+    <div class="sec-hd"><div class="sn" id="sn3">4</div><span class="sec-title">Asset deliverables</span></div>
+    <div class="sec-body">
+      <div class="asset-box">
+        <div class="strip-title">Client-supplied assets</div>
+        <div class="grid">
+          <div class="f"><label>Assets location <span class="rdot"></span></label><input type="text" id="f-assets" placeholder="Paste link to Drive, Dropbox, WeTransfer or shared folder…"></div>
+          <div class="f"><label>Assets ready for use?</label><select id="f-assets-ready"><option value="">— select —</option><option>Yes — all assets uploaded and ready</option><option>Partially — some assets still to come</option><option>No — assets TBC, activation team to source/create</option></select></div>
+          <div class="f full"><label>Asset notes</label><textarea id="f-asset-notes" placeholder="Naming conventions, which assets map to which placement, usage rights, anything to avoid…" style="min-height:52px"></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. EXTENDED NETWORK -->
+  <div class="sec">
+    <div class="sec-hd"><div class="sn" id="sn4">5</div><span class="sec-title">Extended network</span><span class="sec-aside">Optional</span></div>
+    <div class="sec-body" style="padding-top:0;padding-bottom:0">
+      <div class="en-wrap">
+        <div class="en-toggle" onclick="togEN()">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--border-md);flex-shrink:0" id="en-dot"></div>
+          <span class="en-label">Extended network included in this campaign?</span>
+          <span class="en-badge" id="en-badge">Not included</span>
+          <span class="en-arrow" id="en-arrow">▼</span>
+        </div>
+        <div class="en-body" id="en-body">
+          <div class="strip-title" style="margin-bottom:10px">Campaign-level details</div>
+          <div class="grid" style="margin-bottom:14px">
+            <div class="f"><label>Total impressions</label><input type="text" id="f-en-imp" placeholder="e.g. 500,000"></div>
+            <div class="f"><label>Guaranteed or estimated?</label><select id="f-en-type"><option value="">— select —</option><option>Guaranteed</option><option>Estimated</option><option>Mixed — see per-page breakdown</option></select></div>
+            <div class="f"><label>Content alignment</label><select id="f-en-align"><option value="">— select —</option><option>Must mirror our creative exactly</option><option>Brand guidelines, creative freedom in execution</option><option>Full creative freedom — brand mention required only</option><option>Varies by page — see below</option></select></div>
+            <div class="f"><label>Partner brief / content guide</label><input type="text" placeholder="Link to partner brief"></div>
+            <div class="f full"><label>Overview notes</label><textarea placeholder="Exclusivity requirements, posting windows, approval process…" style="min-height:52px"></textarea></div>
+          </div>
+          <div class="strip-title" style="margin-bottom:8px">Partner pages</div>
+          <div class="en-col-hdr"><span>Page name</span><span>Handle(s)</span><span>Platform(s)</span><span></span></div>
+          <div id="en-pages"></div>
+          <button class="add-btn" onclick="addENPage()" style="margin-top:4px">+ Add partner page</button>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0.75rem 0"></div>
+  </div>
+
+  <!-- 6. BRAND & COPY -->
+  <div class="sec">
+    <div class="sec-hd"><div class="sn" id="sn5">6</div><span class="sec-title">Brand guidelines &amp; copy direction</span><span class="sec-aside">Unique per client</span></div>
+    <div class="sec-body">
+      <div class="brand-panel">
+        <div class="strip-title">Brand assets</div>
+        <div class="grid">
+          <div class="f"><label>Brand guidelines document <span class="rdot"></span></label><input type="text" id="f-brandguide" placeholder="Link to Figma / brand deck / Google Drive"></div>
+          <div class="f"><label>Logo files location</label><input type="text" placeholder="Link to approved logo pack"></div>
+          <div class="f"><label>Approved fonts (primary)</label><input type="text" placeholder="e.g. GT Walsheim Bold"></div>
+          <div class="f"><label>Approved fonts (secondary)</label><input type="text" placeholder="e.g. Helvetica Neue Regular"></div>
+        </div>
+        <div class="f" style="margin-top:12px">
+          <label>Brand colours — type a hex &amp; press enter</label>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px"><input class="hex-input" type="text" id="hex-in" placeholder="#000000" maxlength="7"></div>
+          <div id="swatches" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+        </div>
+        <div class="grid" style="margin-top:12px">
+          <div class="f"><label>Do not use / restrictions</label><input type="text" placeholder="e.g. No red tones, no competitor logos"></div>
+          <div class="f"><label>Previous campaigns to reference</label><input type="text" placeholder="Link or file name"></div>
+          <div class="f full"><label>Mood board / visual inspiration</label><textarea placeholder="Links to reference ads, visual direction, client-provided examples…" style="min-height:52px"></textarea></div>
+        </div>
+        <hr class="divider">
+        <div class="strip-title">Copy direction — for activation team</div>
+        <div class="grid">
+          <div class="f"><label>Headline inspiration / angles <span class="rdot"></span></label><textarea id="f-headlines" placeholder="2–3 directions to explore. e.g. 'Lead with urgency — limited time'…"></textarea></div>
+          <div class="f"><label>Copy inspiration / references</label><textarea placeholder="Links to ads you love, past campaigns, competitor copy to beat…"></textarea></div>
+          <div class="f"><label>CTAs — preferred options <span class="rdot"></span></label><input type="text" id="f-ctas" placeholder="e.g. Shop now · Discover more · Get yours"></div>
+          <div class="f"><label>Emoji usage</label><select><option value="">— select —</option><option>Use freely — brand is playful</option><option>Use sparingly — 1–2 max</option><option>No emojis — brand is premium</option><option>Follow brand guidelines</option></select></div>
+          <div class="f full"><label>Copy constraints &amp; must-haves</label><textarea id="f-copy-constraints" placeholder="Character limits · Mandatory hashtags · Legal disclaimers · Words to avoid · Promo codes…" style="min-height:60px"></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. DEADLINES -->
+  <div class="sec">
+    <div class="sec-hd"><div class="sn" id="sn6">7</div><span class="sec-title">Approvals &amp; final deadlines</span></div>
+    <div class="sec-body">
+      <div class="grid g3">
+        <div class="f"><label>Client contact for approvals</label><input type="text" id="f-client-contact" placeholder="Name + email"></div>
+        <div class="f"><label>Campaign budget (if shared)</label><input type="text" placeholder="£"></div>
+        <div class="f"><label>Booked media / publisher deadline</label><input type="text" placeholder="e.g. Publisher asset deadline 14 July"></div>
+      </div>
+      <div style="margin-top:1.5rem">
+        <div class="strip-title" style="margin-bottom:10px">Pre-submission checklist</div>
+        <div class="cl">
+          <div class="ci"><input type="checkbox" id="ck1"><label for="ck1">All required fields completed</label></div>
+          <div class="ci"><input type="checkbox" id="ck2"><label for="ck2">Timeline dates filled in — auto-tracking showing the correct current stage</label></div>
+          <div class="ci"><input type="checkbox" id="ck3"><label for="ck3">Each placement clearly marked as paid or organic with correct specs</label></div>
+          <div class="ci"><input type="checkbox" id="ck4"><label for="ck4">Client-supplied assets link is live and accessible</label></div>
+          <div class="ci"><input type="checkbox" id="ck5"><label for="ck5">Headline inspiration &amp; CTA direction given to activation team</label></div>
+          <div class="ci"><input type="checkbox" id="ck6"><label for="ck6">Copy constraints documented — character limits, disclaimers, hashtags</label></div>
+          <div class="ci"><input type="checkbox" id="ck7"><label for="ck7">Brand guidelines link is live and accessible</label></div>
+          <div class="ci"><input type="checkbox" id="ck8"><label for="ck8">If extended network: all partner pages, handles and impression details complete</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLACK SUMMARY -->
+  <div class="slack-wrap">
+    <div class="slack-hdr">
+      <div class="slack-icon"><svg viewBox="0 0 24 24"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg></div>
+      <div>
+        <div class="slack-hdr-title">Slack summary</div>
+        <div class="slack-hdr-sub">Ready to paste into <span id="slack-channel-display">#your-channel</span></div>
+      </div>
+      <button class="btn-regen" onclick="generateSummary()" style="margin-left:auto">↻ Regenerate</button>
+    </div>
+    <div class="slack-body">
+      <div class="slack-msg" id="slack-msg">Fill in the form above and click "Regenerate" — or submit the handover — to generate your Slack message.</div>
+      <div class="slack-actions">
+        <button class="btn-slack" onclick="copySlack()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy to clipboard</button>
+        <span class="copy-confirm" id="copy-confirm">Copied to clipboard</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-row">
+    <button class="btn-primary" onclick="submit()">Submit handover</button>
+    <button class="btn-ghost" onclick="clearAll()">Clear form</button>
+    <span class="sub-hint" id="hint"></span>
+  </div>
+  <div class="ok-banner" id="ok-banner"></div>
+
+</div>
+
+<script>
+const TL_LABELS=['Brief received','Concept approved','V1 mocks','V1 client feedback','V2 mocks','V2 client feedback','Final mocks','Final approval','Assets delivered','Go live'];
+const TL_NEXT=['Build out the concept deck and get initial client alignment before moving to V1 mocks.','Begin V1 mock production based on the approved concept. Refer to the brand guidelines and copy direction in this brief.','Share V1 mocks with the CSM for internal review before client submission.','Review V1 feedback carefully. Incorporate all changes and prepare V2 mocks — flag any feedback that conflicts with the original brief.','Share V2 mocks with the CSM for internal review before client submission.','Review V2 feedback. Prepare final mocks incorporating all outstanding changes. This should be the last revision round.','Submit final mocks for client sign-off. Ensure all placements, specs and copy are fully locked.','Prepare and package all final assets for delivery. Confirm file formats, naming conventions and delivery method with the CSM.','Confirm go-live with the CSM. Ensure all assets are live, tracking is in place and the campaign is running correctly.','Campaign is live. Monitor performance and flag any issues to the CSM immediately.'];
+let selPaid=new Set(),selOrg=new Set(),ep=0,enOpen=false;
+const tlData=Array.from({length:10},()=>({date:'',notes:''}));
+
+function buildTLRows(){
+  const body=document.getElementById('tl-rows-body');
+  body.innerHTML='';
+  TL_LABELS.forEach((lbl,i)=>{
+    const div=document.createElement('div');
+    div.className='tl-row is-future';div.id='tlr-'+i;
+    div.innerHTML=`<div class="tl-cell"><span class="tl-stage-name">${lbl}</span></div>
+      <div class="tl-cell" id="tlsc-${i}"><span class="tl-status-pill pill-future">Upcoming</span></div>
+      <div class="tl-cell"><input type="date" id="tdi-${i}" oninput="onDateChange(${i})"></div>
+      <div class="tl-cell"><input type="text" id="tdn-${i}" placeholder="Optional notes…" oninput="tlData[${i}].notes=this.value"></div>`;
+    body.appendChild(div);
+  });
+}
+
+function onDateChange(i){
+  const val=document.getElementById('tdi-'+i).value;
+  tlData[i].date=val;
+  const meta=document.getElementById('tm-'+i);
+  if(val){const d=new Date(val);meta.textContent=d.getDate()+'/'+(d.getMonth()+1)+'/'+(d.getFullYear()+'').slice(2);}
+  else meta.textContent='';
+  autoDetect();tick();
+}
+
+function autoDetect(){
+  const today=new Date();today.setHours(0,0,0,0);
+  let cur=-1;
+  for(let i=0;i<10;i++){if(tlData[i].date){const d=new Date(tlData[i].date);d.setHours(0,0,0,0);if(d<=today)cur=i;}}
+  for(let i=0;i<10;i++){
+    const row=document.getElementById('tlr-'+i);
+    const dot=document.getElementById('ts-'+i);
+    const sc=document.getElementById('tlsc-'+i);
+    row.classList.remove('is-done','is-current','is-future');
+    dot.classList.remove('done','current','future');
+    if(i<cur){row.classList.add('is-done');dot.classList.add('done');sc.innerHTML='<span class="tl-status-pill pill-done">Completed</span>';}
+    else if(i===cur){row.classList.add('is-current');dot.classList.add('current');sc.innerHTML='<span class="tl-status-pill pill-current">Current stage</span>';}
+    else{row.classList.add('is-future');dot.classList.add('future');sc.innerHTML='<span class="tl-status-pill pill-future">Upcoming</span>';}
+  }
+}
+
+function togP(key,lane){
+  const chk=document.getElementById('c-'+key);
+  const body=document.getElementById('pb-'+key);
+  chk.checked=!chk.checked;
+  body.classList.toggle('open',chk.checked);
+  if(lane==='paid'){chk.checked?selPaid.add(key):selPaid.delete(key);}
+  else{chk.checked?selOrg.add(key):selOrg.delete(key);}
+  document.getElementById('paid-count').textContent=selPaid.size+' placement'+(selPaid.size!==1?'s':'');
+  document.getElementById('org-count').textContent=selOrg.size+' placement'+(selOrg.size!==1?'s':'');
+  document.getElementById('paid-empty').style.display=selPaid.size?'none':'block';
+  document.getElementById('org-empty').style.display=selOrg.size?'none':'block';
+  tick();
+}
+
+function togEN(){
+  enOpen=!enOpen;
+  document.getElementById('en-body').classList.toggle('open',enOpen);
+  document.getElementById('en-arrow').classList.toggle('open',enOpen);
+  const badge=document.getElementById('en-badge'),dot=document.getElementById('en-dot');
+  badge.textContent=enOpen?'Included':'Not included';badge.classList.toggle('active',enOpen);
+  dot.style.background=enOpen?'var(--green)':'var(--border-md)';
+}
+
+function addENPage(){
+  ep++;const id=ep;
+  const row=document.createElement('div');row.className='en-page-row';row.id='enp'+id;
+  row.innerHTML=`<div class="en-page-top"><input type="text" placeholder="e.g. Sidemen, GRM Daily"><input type="text" placeholder="e.g. @sidemen"><select><option>Instagram</option><option>TikTok</option><option>Meta</option><option>Instagram + TikTok</option><option>All platforms</option></select><button class="rm" onclick="document.getElementById('enp${id}').remove()">×</button></div><div class="en-page-body"><div class="pf"><label>Impressions</label><input type="text" placeholder="e.g. 120,000"></div><div class="pf"><label>Guaranteed or estimated?</label><select><option value="">—</option><option>Guaranteed</option><option>Estimated</option></select></div><div class="pf"><label>Content alignment</label><select><option value="">—</option><option>Must mirror our creative</option><option>Brand guidelines, creative freedom</option><option>Full creative freedom</option></select></div><div class="pf"><label>Posting date</label><input type="date"></div><div class="pf"><label>Approval required?</label><select><option value="">—</option><option>Yes — approve before posting</option><option>No — posts at their discretion</option></select></div><div class="pf"><label>Notes</label><input type="text" placeholder="Any specific requirements…"></div></div>`;
+  document.getElementById('en-pages').appendChild(row);
+}
+
+document.getElementById('hex-in').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&/^#[0-9A-Fa-f]{6}$/.test(this.value)){
+    const s=document.createElement('div');s.className='swatch';s.style.background=this.value;s.title=this.value;s.onclick=()=>s.remove();
+    document.getElementById('swatches').appendChild(s);this.value='';
+  }
+});
+
+document.getElementById('f-slack').addEventListener('input',function(){
+  const ch=this.value.trim();
+  document.getElementById('slack-channel-display').textContent=ch?(ch.startsWith('#')?ch:'#'+ch):'#your-channel';
+});
+
+function fmtDate(val){if(!val)return'';const d=new Date(val);return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();}
+
+function generateSummary(){
+  const client=document.getElementById('f-client').value.trim()||'[Client not specified]';
+  const campaign=document.getElementById('f-camp').value.trim()||'[Campaign not named]';
+  const csm=document.getElementById('f-csm').value.trim()||'[CSM not specified]';
+  const live=fmtDate(document.getElementById('f-live').value)||'TBC';
+  const slackCh=(document.getElementById('f-slack').value.trim()||'').replace(/^#?/,'#').replace(/^#$/,'#your-channel');
+  const objs=Array.from(document.querySelectorAll('.oc.on')).map(el=>el.querySelector('.oc-lbl').textContent);
+  const audience=document.getElementById('f-audience').value.trim();
+  const message=document.getElementById('f-message').value.trim();
+  const cta=document.getElementById('f-cta').value.trim();
+  const approved=document.getElementById('f-approved').value.trim();
+  const pending=document.getElementById('f-pending').value.trim();
+  const watchouts=document.getElementById('f-watchouts').value.trim();
+  const assetsLink=document.getElementById('f-assets').value.trim();
+  const assetsReady=document.getElementById('f-assets-ready').value;
+  const headlines=document.getElementById('f-headlines').value.trim();
+  const ctas=document.getElementById('f-ctas').value.trim();
+  const copyConstraints=document.getElementById('f-copy-constraints').value.trim();
+  const platLabel={'mf-p':'Meta Feed (paid)','ms-p':'Meta Stories (paid)','mr-p':'Meta Reels (paid)','if-p':'IG Feed (paid)','is-p':'IG Stories (paid)','ir-p':'IG Reels (paid)','tt-p':'TikTok In-feed (paid)','mf-o':'Meta Feed (organic)','if-o':'IG Feed (organic)','is-o':'IG Stories (organic)','ir-o':'IG Reels (organic)','tt-o':'TikTok (organic)'};
+  let curIdx=-1;
+  for(let i=0;i<10;i++){if(document.getElementById('tlr-'+i).classList.contains('is-current'))curIdx=i;}
+  const curLabel=curIdx>=0?TL_LABELS[curIdx]:'Not yet set';
+  const nextAction=curIdx>=0?TL_NEXT[curIdx]:TL_NEXT[0];
+  const done=[],upcoming=[];
+  for(let i=0;i<10;i++){
+    const row=document.getElementById('tlr-'+i);
+    const dateStr=fmtDate(tlData[i].date);
+    const notes=tlData[i].notes?' — '+tlData[i].notes:'';
+    if(row.classList.contains('is-done'))done.push(TL_LABELS[i]+(dateStr?' ('+dateStr+')':'')+notes);
+    else if(row.classList.contains('is-future')&&dateStr)upcoming.push(TL_LABELS[i]+' → '+dateStr);
+  }
+  const paidList=Array.from(selPaid),orgList=Array.from(selOrg);
+  let m='';
+  m+=`👋 Hi team — handover brief for *${campaign}* (${client})\n`;
+  m+=`📋 Slack: ${slackCh}  |  CSM: ${csm}  |  Go-live: ${live}\n\n`;
+  m+=`━━━━━━━━━━━━━━━━━━━━\n`;
+  m+=`📍 *WHERE WE ARE*\nCurrent stage: *${curLabel}*\n`;
+  if(done.length)m+=`Completed: ${done.join(' → ')}\n`;
+  if(upcoming.length)m+=`Coming up: ${upcoming.join('  |  ')}\n`;
+  m+=`\n`;
+  if(approved)m+=`✅ *APPROVED SO FAR*\n${approved}\n\n`;
+  if(pending)m+=`⏳ *PENDING CLIENT SIGN-OFF*\n${pending}\n\n`;
+  if(watchouts)m+=`⚠️ *WATCH-OUTS*\n${watchouts}\n\n`;
+  m+=`━━━━━━━━━━━━━━━━━━━━\n🎯 *CAMPAIGN BRIEF*\n`;
+  if(objs.length)m+=`Objectives: ${objs.join(', ')}\n`;
+  if(audience)m+=`Audience: ${audience}\n`;
+  if(message)m+=`Key message: ${message}\n`;
+  if(cta)m+=`CTA: ${cta}\n`;
+  m+=`\n`;
+  if(paidList.length||orgList.length){
+    m+=`📱 *PLATFORMS IN SCOPE*\n`;
+    if(paidList.length)m+=`Paid: ${paidList.map(k=>platLabel[k]||k).join(', ')}\n`;
+    if(orgList.length)m+=`Organic: ${orgList.map(k=>platLabel[k]||k).join(', ')}\n`;
+    m+=`\n`;
+  }
+  if(assetsLink){m+=`📁 *CLIENT ASSETS*\n${assetsLink}`;if(assetsReady)m+=` (${assetsReady})`;m+=`\n\n`;}
+  if(headlines||ctas||copyConstraints){
+    m+=`✍️ *COPY DIRECTION*\n`;
+    if(headlines)m+=`Headline angles: ${headlines}\n`;
+    if(ctas)m+=`CTAs: ${ctas}\n`;
+    if(copyConstraints)m+=`Constraints: ${copyConstraints}\n`;
+    m+=`\n`;
+  }
+  m+=`━━━━━━━━━━━━━━━━━━━━\n🚀 *WHAT NEEDS TO HAPPEN NEXT*\n${nextAction}\n\n`;
+  m+=`Questions? Ping ${csm} directly or drop a message in ${slackCh}.`;
+  document.getElementById('slack-msg').textContent=m;
+}
+
+function copySlack(){
+  const txt=document.getElementById('slack-msg').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const c=document.getElementById('copy-confirm');c.classList.add('show');
+    setTimeout(()=>c.classList.remove('show'),2500);
+  });
+}
+
+function tick(){
+  const steps=[document.getElementById('f-client').value.trim()!=='',tlData.some(r=>r.date!==''),document.querySelectorAll('.oc.on').length>0,selPaid.size+selOrg.size>0,document.getElementById('f-assets').value.trim()!=='',false,false];
+  steps.forEach((done,i)=>{
+    const ps=document.getElementById('ps'+i),sn=document.getElementById('sn'+i);
+    if(ps){ps.classList.toggle('done',done);ps.classList.toggle('active',!done&&steps.slice(0,i).every(Boolean));}
+    if(sn)sn.classList.toggle('on',done||(!done&&steps.slice(0,i).every(Boolean)));
+  });
+}
+
+function submit(){
+  const missing=[];
+  if(!document.getElementById('f-client').value.trim())missing.push('client name');
+  if(!document.getElementById('f-camp').value.trim())missing.push('campaign name');
+  if(!tlData.some(r=>r.date!==''))missing.push('at least one timeline date');
+  if(!document.querySelectorAll('.oc.on').length)missing.push('objective');
+  if(selPaid.size+selOrg.size===0)missing.push('at least one placement');
+  if(missing.length){document.getElementById('hint').textContent='Missing: '+missing.join(', ');return;}
+  document.getElementById('hint').textContent='';
+  generateSummary();
+  const ch=document.getElementById('f-slack').value.trim()||'your channel';
+  const banner=document.getElementById('ok-banner');
+  banner.textContent='✓ Handover submitted. Slack summary generated below — copy and paste into '+(ch.startsWith('#')?ch:'#'+ch);
+  banner.classList.add('show');
+  document.querySelectorAll('.ps').forEach(p=>{p.classList.add('done');p.classList.remove('active');});
+  document.getElementById('slack-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function clearAll(){
+  if(!confirm('Clear all fields and start over?'))return;
+  document.querySelectorAll('input[type=text],input[type=date],textarea').forEach(el=>el.value='');
+  document.querySelectorAll('select').forEach(el=>el.selectedIndex=0);
+  document.querySelectorAll('.oc.on').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.plrow-body.open').forEach(el=>el.classList.remove('open'));
+  document.querySelectorAll('.plrow-chk input').forEach(el=>el.checked=false);
+  document.getElementById('en-pages').innerHTML='';
+  document.getElementById('swatches').innerHTML='';
+  for(let i=0;i<10;i++){tlData[i]={date:'',notes:''};document.getElementById('tm-'+i).textContent='';document.getElementById('ts-'+i).className='tl-stage future';}
+  autoDetect();
+  if(enOpen)togEN();
+  selPaid=new Set();selOrg=new Set();ep=0;
+  document.getElementById('paid-count').textContent='0 placements';document.getElementById('org-count').textContent='0 placements';
+  document.getElementById('paid-empty').style.display='block';document.getElementById('org-empty').style.display='block';
+  document.getElementById('slack-msg').textContent='Fill in the form above and click "Regenerate" — or submit the handover — to generate your Slack message.';
+  document.getElementById('slack-channel-display').textContent='#your-channel';
+  document.getElementById('ok-banner').classList.remove('show');
+  document.getElementById('hint').textContent='';
+  document.querySelectorAll('.ps').forEach((p,i)=>{p.classList.remove('done');p.classList.toggle('active',i===0);});
+  document.querySelectorAll('.sn').forEach((s,i)=>s.classList.toggle('on',i===0));
+}
+
+buildTLRows();
+</script>
+</body>
+</html>
